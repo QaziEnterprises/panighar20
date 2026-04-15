@@ -271,13 +271,26 @@ export default function EditBillDialog({ open, onOpenChange, sale, customers, on
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <Label className="text-xs text-muted-foreground">Customer</Label>
-                  <Select value={customerId} onValueChange={setCustomerId}>
-                    <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="walk-in">Walk-in Customer</SelectItem>
-                      {customers.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
+                  <CustomerAutocomplete
+                    customers={customers.map(c => ({ ...c, phone: (c as any).phone || null }))}
+                    value={customerNameInput}
+                    onValueChange={(val) => {
+                      setCustomerNameInput(val);
+                      if (!val.trim() || val === "Walk-in Customer") {
+                        setCustomerId("walk-in");
+                      }
+                    }}
+                    onCustomerSelect={(customer) => {
+                      if (customer) {
+                        setCustomerId(customer.id);
+                        setCustomerNameInput(customer.name);
+                      } else {
+                        setCustomerId("walk-in");
+                      }
+                    }}
+                    placeholder="Type customer name..."
+                    className="h-9 text-sm"
+                  />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs text-muted-foreground">Date</Label>
