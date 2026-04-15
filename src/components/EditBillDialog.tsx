@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Pencil, Plus, Trash2, Save, CalendarIcon } from "lucide-react";
+import CustomerAutocomplete from "@/components/CustomerAutocomplete";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
