@@ -26,7 +26,7 @@ interface SaleItem {
   product_id?: string | null;
 }
 
-interface Customer { id: string; name: string; }
+interface Customer { id: string; name: string; phone?: string | null; }
 
 interface EditBillDialogProps {
   open: boolean;
