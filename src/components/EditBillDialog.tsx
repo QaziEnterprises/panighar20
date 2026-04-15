@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Pencil, Plus, Trash2, Save, CalendarIcon } from "lucide-react";
+import CustomerAutocomplete from "@/components/CustomerAutocomplete";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,7 +26,7 @@ interface SaleItem {
   product_id?: string | null;
 }
 
-interface Customer { id: string; name: string; }
+interface Customer { id: string; name: string; phone?: string | null; }
 
 interface EditBillDialogProps {
   open: boolean;
@@ -37,6 +38,11 @@ interface EditBillDialogProps {
 
 export default function EditBillDialog({ open, onOpenChange, sale, customers, onSaved }: EditBillDialogProps) {
   const [customerId, setCustomerId] = useState(sale.customer_id || "walk-in");
+  const [customerNameInput, setCustomerNameInput] = useState(() => {
+    if (!sale.customer_id) return "Walk-in Customer";
+    const found = customers.find(c => c.id === sale.customer_id);
+    return found?.name || "Walk-in Customer";
+  });
   const [date, setDate] = useState(sale.date);
   const [paymentMethod, setPaymentMethod] = useState(sale.payment_method);
   const [paymentStatus, setPaymentStatus] = useState(sale.payment_status);
@@ -53,6 +59,8 @@ export default function EditBillDialog({ open, onOpenChange, sale, customers, on
   useEffect(() => {
     if (open) {
       setCustomerId(sale.customer_id || "walk-in");
+      const found = customers.find(c => c.id === sale.customer_id);
+      setCustomerNameInput(found?.name || "Walk-in Customer");
       setDate(sale.date);
       setPaymentMethod(sale.payment_method);
       setPaymentStatus(sale.payment_status);
@@ -263,13 +271,26 @@ export default function EditBillDialog({ open, onOpenChange, sale, customers, on
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <Label className="text-xs text-muted-foreground">Customer</Label>
-                  <Select value={customerId} onValueChange={setCustomerId}>
-                    <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="walk-in">Walk-in Customer</SelectItem>
-                      {customers.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
+                  <CustomerAutocomplete
+                    customers={customers.map(c => ({ ...c, phone: (c as any).phone || null }))}
+                    value={customerNameInput}
+                    onValueChange={(val) => {
+                      setCustomerNameInput(val);
+                      if (!val.trim() || val === "Walk-in Customer") {
+                        setCustomerId("walk-in");
+                      }
+                    }}
+                    onCustomerSelect={(customer) => {
+                      if (customer) {
+                        setCustomerId(customer.id);
+                        setCustomerNameInput(customer.name);
+                      } else {
+                        setCustomerId("walk-in");
+                      }
+                    }}
+                    placeholder="Type customer name..."
+                    className="h-9 text-sm"
+                  />
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-xs text-muted-foreground">Date</Label>

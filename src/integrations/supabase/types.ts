@@ -399,6 +399,39 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          link: string | null
+          message: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          link?: string | null
+          message?: string | null
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          link?: string | null
+          message?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       price_list_items: {
         Row: {
           created_at: string | null
@@ -664,10 +697,151 @@ export type Database = {
           },
         ]
       }
+      receivable_payments: {
+        Row: {
+          amount: number
+          contact_id: string | null
+          created_at: string
+          created_by: string | null
+          date: string | null
+          id: string
+          notes: string | null
+          payment_method: string | null
+          sale_id: string | null
+        }
+        Insert: {
+          amount?: number
+          contact_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          date?: string | null
+          id?: string
+          notes?: string | null
+          payment_method?: string | null
+          sale_id?: string | null
+        }
+        Update: {
+          amount?: number
+          contact_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          date?: string | null
+          id?: string
+          notes?: string | null
+          payment_method?: string | null
+          sale_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "receivable_payments_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "receivable_payments_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sale_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      return_items: {
+        Row: {
+          id: string
+          product_id: string | null
+          product_name: string | null
+          quantity: number
+          return_id: string
+          subtotal: number
+          unit_price: number
+        }
+        Insert: {
+          id?: string
+          product_id?: string | null
+          product_name?: string | null
+          quantity?: number
+          return_id: string
+          subtotal?: number
+          unit_price?: number
+        }
+        Update: {
+          id?: string
+          product_id?: string | null
+          product_name?: string | null
+          quantity?: number
+          return_id?: string
+          subtotal?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "return_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "return_items_return_id_fkey"
+            columns: ["return_id"]
+            isOneToOne: false
+            referencedRelation: "returns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      returns: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          date: string
+          id: string
+          notes: string | null
+          reason: string | null
+          refund_method: string | null
+          sale_id: string | null
+          total_refund: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          date?: string
+          id?: string
+          notes?: string | null
+          reason?: string | null
+          refund_method?: string | null
+          sale_id?: string | null
+          total_refund?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          date?: string
+          id?: string
+          notes?: string | null
+          reason?: string | null
+          refund_method?: string | null
+          sale_id?: string | null
+          total_refund?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "returns_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sale_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sale_items: {
         Row: {
           id: string
           product_id: string | null
+          product_name: string | null
           quantity: number | null
           sale_id: string
           subtotal: number | null
@@ -676,6 +850,7 @@ export type Database = {
         Insert: {
           id?: string
           product_id?: string | null
+          product_name?: string | null
           quantity?: number | null
           sale_id: string
           subtotal?: number | null
@@ -684,6 +859,7 @@ export type Database = {
         Update: {
           id?: string
           product_id?: string | null
+          product_name?: string | null
           quantity?: number | null
           sale_id?: string
           subtotal?: number | null
@@ -702,6 +878,65 @@ export type Database = {
             columns: ["sale_id"]
             isOneToOne: false
             referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sale_transactions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          customer_type: string | null
+          date: string
+          discount: number | null
+          id: string
+          invoice_no: string | null
+          notes: string | null
+          paid_amount: number | null
+          payment_method: string | null
+          payment_status: string | null
+          subtotal: number | null
+          total: number | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          customer_type?: string | null
+          date?: string
+          discount?: number | null
+          id?: string
+          invoice_no?: string | null
+          notes?: string | null
+          paid_amount?: number | null
+          payment_method?: string | null
+          payment_status?: string | null
+          subtotal?: number | null
+          total?: number | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          customer_type?: string | null
+          date?: string
+          discount?: number | null
+          id?: string
+          invoice_no?: string | null
+          notes?: string | null
+          paid_amount?: number | null
+          payment_method?: string | null
+          payment_status?: string | null
+          subtotal?: number | null
+          total?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sale_transactions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "contacts"
             referencedColumns: ["id"]
           },
         ]
@@ -761,6 +996,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      todos: {
+        Row: {
+          completed: boolean
+          created_at: string
+          created_by: string | null
+          id: string
+          priority: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          priority?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          priority?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
