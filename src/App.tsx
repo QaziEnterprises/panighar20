@@ -126,7 +126,7 @@ function AppRoutes() {
     </div>
   );
 
-  if (!user) return <Routes><Route path="/login" element={<LoginPage />} /><Route path="/reset-password" element={<Suspense fallback={pageFallback}><ResetPasswordPage /></Suspense>} /><Route path="*" element={<Navigate to="/login" replace />} /></Routes>;
+  if (!user) return <Routes><Route path="/" element={<Suspense fallback={pageFallback}><HomePage /></Suspense>} /><Route path="/login" element={<LoginPage />} /><Route path="/reset-password" element={<Suspense fallback={pageFallback}><ResetPasswordPage /></Suspense>} /><Route path="*" element={<Navigate to="/" replace />} /></Routes>;
 
   return (
     <AppLayout>
@@ -134,6 +134,7 @@ function AppRoutes() {
         <Routes>
           <Route path="/login" element={<Navigate to="/" replace />} />
           <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+          <Route path="/home" element={<Suspense fallback={pageFallback}><HomePage /></Suspense>} />
           <Route path="/inventory" element={<ProtectedRoute><InventoryPage /></ProtectedRoute>} />
           <Route path="/contacts" element={<ProtectedRoute><ContactsPage /></ProtectedRoute>} />
           <Route path="/products-db" element={<ProtectedRoute><ProductsPage /></ProtectedRoute>} />
