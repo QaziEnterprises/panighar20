@@ -38,6 +38,11 @@ interface EditBillDialogProps {
 
 export default function EditBillDialog({ open, onOpenChange, sale, customers, onSaved }: EditBillDialogProps) {
   const [customerId, setCustomerId] = useState(sale.customer_id || "walk-in");
+  const [customerNameInput, setCustomerNameInput] = useState(() => {
+    if (!sale.customer_id) return "Walk-in Customer";
+    const found = customers.find(c => c.id === sale.customer_id);
+    return found?.name || "Walk-in Customer";
+  });
   const [date, setDate] = useState(sale.date);
   const [paymentMethod, setPaymentMethod] = useState(sale.payment_method);
   const [paymentStatus, setPaymentStatus] = useState(sale.payment_status);
