@@ -59,6 +59,8 @@ export default function EditBillDialog({ open, onOpenChange, sale, customers, on
   useEffect(() => {
     if (open) {
       setCustomerId(sale.customer_id || "walk-in");
+      const found = customers.find(c => c.id === sale.customer_id);
+      setCustomerNameInput(found?.name || "Walk-in Customer");
       setDate(sale.date);
       setPaymentMethod(sale.payment_method);
       setPaymentStatus(sale.payment_status);
