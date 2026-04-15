@@ -13,6 +13,7 @@ import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
 // Lazy load all pages for performance
+const HomePage = lazy(() => import("@/pages/HomePage"));
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
 const InventoryPage = lazy(() => import("@/pages/InventoryPage"));
 const ResetPasswordPage = lazy(() => import("@/pages/ResetPasswordPage"));
